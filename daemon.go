@@ -176,9 +176,10 @@ func build() bool {
 			}
 		}
 		log.Println(okColor("Build ok."))
+		return true
 	}
 
-	return true
+	return false
 }
 
 func runBuildCommand(c string) error {
