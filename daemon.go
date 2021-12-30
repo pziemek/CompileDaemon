@@ -135,6 +135,7 @@ var (
 	flagVerbose         = flag.Bool("verbose", false, "Be verbose about which directories are watched.")
 	flagPolling         = flag.Bool("polling", false, "Use polling method to watch file change instead of fsnotify")
 	flagPollingInterval = flag.Int("polling-interval", 100, "Milliseconds of interval between polling file changes when polling option is selected")
+	flagSuspend         = flag.String("suspend", ".suspend_build", "Non empty content holds build process")
 
 	// initialized in main() due to custom type.
 	flagDirectories      globList
@@ -162,16 +163,20 @@ func failColor(format string, args ...interface{}) string {
 
 // Run `go build` and print the output if something's gone wrong.
 func build() bool {
-	log.Println(okColor("Running build commands!"))
+	if checkIfSuspended() {
+		log.Println(okColor("Build is suspended..."))
+	} else {
+		log.Println(okColor("Running build commands!"))
 
-	for _, c := range flagBuildCommandList.commands {
-		err := runBuildCommand(c)
-		if err != nil {
-			log.Println(failColor("Command failed: "), failColor(c))
-			return false
+		for _, c := range flagBuildCommandList.commands {
+			err := runBuildCommand(c)
+			if err != nil {
+				log.Println(failColor("Command failed: "), failColor(c))
+				return false
+			}
 		}
+		log.Println(okColor("Build ok."))
 	}
-	log.Println(okColor("Build ok."))
 
 	return true
 }

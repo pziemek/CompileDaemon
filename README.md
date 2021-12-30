@@ -40,6 +40,7 @@ the env var `GO111MODULE=on`, which enables you to develop outside of
 |`-color=_` | false | Colorize the output of the daemon's status messages. |
 |`-log-prefix=_` | true | Prefix all child process output with stdout/stderr labels and log timestamps. |
 |`-graceful-kill=_`| false | On supported platforms, send the child process a SIGTERM to allow it to exit gracefully if possible. |
+|`-suspend=...` | ".suspend_build" | If build process should be hold, inside file  `.suspend_build` put some content, if file empty build not suspended
 
 ## Examples
 
